@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Welcome to the Blog App</h1>
+
+  <h2>Create a New Post</h2>
+  <form id="newPostForm" action="/new" method="POST">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required>
+    <label for="content">Content:</label>
+    <textarea id="content" name="content" rows="4" required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+
+  <h2>All Posts</h2>
+  <% posts.forEach(post => { %>
+    <div class="post" id="post_<%= post.id %>">
+      <h3><%= post.title %></h3>
+      <p><%= post.content %></p>
+      <div>
+        <a href="#" onclick="editPost('<%= post.id %>', '<%= post.title %>', '<%= post.content %>')">Edit</a>
+        <form action="/delete/<%= post.id %>" method="POST" style="display: inline;">
+          <button type="submit">Delete</button>
+        </form>
+      </div>
+    </div>
+  <% }); %>
+
+  <div id="editFormContainer" style="display: none;">
+    <h2>Edit Post</h2>
+    <form id="editForm" method="POST">
+      <input type="hidden" id="editId" name="id">
+      <label for="editTitle">Title:</label>
+      <input type="text" id="editTitle" name="title" required>
+      <label for="editContent">Content:</label>
+      <textarea id="editContent" name="content" rows="4" required></textarea>
+      <button type="submit">Save</button>
+    </form>
+  </div>
+
+  <script>
+    function editPost(id, title, content) {
+      document.getElementById('editId').value = id;
+      document.getElementById('editTitle').value = title;
+      document.getElementById('editContent').value = content;
+      document.getElementById('editForm').action = '/edit/' + id;
+      document.getElementById('editFormContainer').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
